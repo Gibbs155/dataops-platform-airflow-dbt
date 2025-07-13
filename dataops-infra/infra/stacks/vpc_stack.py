@@ -146,7 +146,7 @@ class VpcStack(Stack):
     def tag_subnets(self) -> None:
         subnet_types = {
             "public": ec2.SubnetType.PUBLIC,
-            "isolated": ec2.SubnetType.ISOLATED,
+            "isolated": ec2.SubnetType.PRIVATE_ISOLATED,
         }
         for st_name, st in subnet_types.items():
             selection = self.instance.select_subnets(subnet_type=st)
