@@ -44,7 +44,7 @@ class RedshiftClusterStack(Stack):
             ],
         )
 
-        redshift_cluster = redshift.Cluster(
+        redshift_cluster = redshift.CfnCluster(
             self,
             id="redshift-cluster",
             master_user=redshift.ClusterProps(  # Cambiar esta línea
