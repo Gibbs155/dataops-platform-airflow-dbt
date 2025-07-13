@@ -1,7 +1,7 @@
 import os
 
 from aws_cdk import (
-    core,
+    Stack, RemovalPolicy
     aws_ecs as ecs,
     aws_secretsmanager as sm,
     aws_elasticloadbalancingv2 as elbv2,
@@ -14,6 +14,7 @@ from stacks.airflow_rds import RDSStack
 from stacks.airflow_redis import RedisStack
 from types import SimpleNamespace
 from typing_extensions import TypedDict
+from constructs import Construct
 
 props_type = TypedDict(
     "props_type",
@@ -27,9 +28,9 @@ props_type = TypedDict(
 )
 
 
-class AirflowServices(core.Stack):
+class AirflowServices(Stack):
     def __init__(
-        self, scope: core.Construct, id: str, props: props_type, **kwargs
+        self, scope: Construct, id: str, props: props_type, **kwargs
     ) -> None:
         super().__init__(scope, id, **kwargs)
         ns = SimpleNamespace(**props)
@@ -107,7 +108,7 @@ class AirflowServices(core.Stack):
                 cloud_map_namespace=webserver_ns,
                 name="webserver",
                 dns_record_type=sd.DnsRecordType.A,
-                dns_ttl=core.Duration.seconds(30),
+                dns_ttl=Duration.seconds(30),
             ),
         )
 
@@ -239,9 +240,9 @@ class AirflowServices(core.Stack):
         listener = lb.add_listener("airflow-webserver-cdk-listener", port=80, open=True)
 
         webserver_hc = elbv2.HealthCheck(
-            interval=core.Duration.seconds(60),
+            interval=Duration.seconds(60),
             path="/health",
-            timeout=core.Duration.seconds(5),
+            timeout=Duration.seconds(5),
         )
 
         # Attach ALB to ECS Service

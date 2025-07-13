@@ -3,13 +3,13 @@ from aws_cdk import (
     aws_ec2 as ec2,
     aws_rds as rds,
     aws_secretsmanager as sm,
-    core,
+    Stack, RemovalPolicy
 )
 from stacks.vpc_stack import VpcStack
+from constructs import Construct
 
-
-class RDSStack(core.Stack):
-    def __init__(self, scope: core.Construct, id: str, vpc: VpcStack, **kwargs) -> None:
+class RDSStack(Stack):
+    def __init__(self, scope: Construct, id: str, vpc: VpcStack, **kwargs) -> None:
         super().__init__(scope, id, **kwargs)
 
         self.db_name = "airflow"
@@ -46,7 +46,7 @@ class RDSStack(core.Stack):
             ),
             allocated_storage=20,
             security_groups=[vpc.postgres_sg],
-            removal_policy=core.RemovalPolicy.DESTROY,
+            removal_policy=RemovalPolicy.DESTROY,
             parameter_group=rds.ParameterGroup.from_parameter_group_name(
                 self, "para-group-postgres", parameter_group_name="default.postgres13"
             ),
@@ -56,5 +56,5 @@ class RDSStack(core.Stack):
         self._instance = postgres
 
     @property
-    def instance(self) -> core.Resource:
+    def instance(self) -> Resource:
         return self._instance

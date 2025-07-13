@@ -1,6 +1,6 @@
 import os
 from aws_cdk import (
-    core,
+    Stack, RemovalPolicy
     aws_ecs as ecs,
 )
 from types import SimpleNamespace
@@ -9,6 +9,7 @@ from stacks.ecr_stack import ECRStack
 from stacks.redshift_cluster_stack import RedshiftClusterStack
 from types import SimpleNamespace
 from typing_extensions import TypedDict
+from constructs import Construct
 
 props_type = TypedDict(
     "props_type",
@@ -20,9 +21,9 @@ props_type = TypedDict(
 )
 
 
-class DBT(core.Stack):
+class DBT(Stack):
     def __init__(
-        self, scope: core.Construct, id: str, props: props_type, **kwargs
+        self, scope: Construct, id: str, props: props_type, **kwargs
     ) -> None:
         super().__init__(scope, id, **kwargs)
         ns = SimpleNamespace(**props)

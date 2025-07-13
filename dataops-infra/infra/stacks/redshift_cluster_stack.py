@@ -4,13 +4,13 @@ from aws_cdk import (
     aws_secretsmanager as sm,
     aws_ec2 as ec2,
     aws_iam as iam,
-    core,
+    Stack, RemovalPolicy
 )
 from stacks.vpc_stack import VpcStack
+from constructs import Construct
 
-
-class RedshiftClusterStack(core.Stack):
-    def __init__(self, scope: core.Construct, id: str, vpc: VpcStack, **kwargs) -> None:
+class RedshiftClusterStack(Stack):
+    def __init__(self, scope: Construct, id: str, vpc: VpcStack, **kwargs) -> None:
         super().__init__(scope, id, **kwargs)
 
         subnet_group = redshift.ClusterSubnetGroup(
@@ -63,10 +63,10 @@ class RedshiftClusterStack(core.Stack):
             roles=[redshift_s3_read_access_role],
             security_groups=[vpc.redshift_sg],
             subnet_group=subnet_group,
-            removal_policy=core.RemovalPolicy.DESTROY,
+            removal_policy=RemovalPolicy.DESTROY,
         )
         self._instance = redshift_cluster
 
     @property
-    def instance(self) -> core.Resource:
+    def instance(self) -> Resource:
         return self._instance

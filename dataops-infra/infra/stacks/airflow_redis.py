@@ -1,13 +1,13 @@
 from aws_cdk import (
     aws_elasticache as ecache,
     aws_ec2 as ec2,
-    core,
+    Stack, RemovalPolicy
 )
 from stacks.vpc_stack import VpcStack
+from constructs import Construct
 
-
-class RedisStack(core.Stack):
-    def __init__(self, scope: core.Construct, id: str, vpc: VpcStack, **kwargs) -> None:
+class RedisStack(Stack):
+    def __init__(self, scope: Construct, id: str, vpc: VpcStack, **kwargs) -> None:
         super().__init__(scope, id, **kwargs)
 
         subnet_group = ecache.CfnSubnetGroup(
@@ -31,5 +31,5 @@ class RedisStack(core.Stack):
         self._instance = redis
 
     @property
-    def instance(self) -> core.Resource:
+    def instance(self) -> Resource:
         return self._instance

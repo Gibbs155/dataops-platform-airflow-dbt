@@ -1,10 +1,10 @@
 import os
 import secrets
-from aws_cdk import aws_s3 as s3, core
+from aws_cdk import aws_s3 as s3, Stack, RemovalPolicy
+from constructs import Construct
 
-
-class S3Stack(core.Stack):
-    def __init__(self, scope: core.Construct, id: str, **kwargs) -> None:
+class S3Stack(Stack):
+    def __init__(self, scope: Construct, id: str, **kwargs) -> None:
         super().__init__(scope, id, **kwargs)
         rand_int = secrets.randbelow(1000001)
 
@@ -18,10 +18,10 @@ class S3Stack(core.Stack):
                 ignore_public_acls=True,
                 restrict_public_buckets=True,
             ),
-            removal_policy=core.RemovalPolicy.DESTROY,
+            removal_policy=RemovalPolicy.DESTROY,
             versioned=False,
         )
 
     @property
-    def instance(self) -> core.Resource:
+    def instance(self) -> Resource:
         return self._instance

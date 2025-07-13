@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 import os
-from aws_cdk import core
+# from aws_cdk import core  -- old cdk v1
+from aws_cdk import App, Environment
 
 from stacks.vpc_stack import VpcStack
 from stacks.ecr_stack import ECRStack
@@ -12,8 +13,8 @@ from stacks.fargate_services.airflow import AirflowServices
 from stacks.fargate_services.dbt import DBT
 from stacks.redshift_cluster_stack import RedshiftClusterStack
 
-env = core.Environment(region=os.environ.get("AWS_REGION"))
-app = core.App()
+env = Environment(region=os.environ.get("AWS_REGION"))
+app = App()
 
 ecr = ECRStack(app, "ECRStack", env=env)
 s3 = S3Stack(app, "S3Stack", env=env)
