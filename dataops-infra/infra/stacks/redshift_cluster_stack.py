@@ -34,11 +34,6 @@ class RedshiftClusterStack(Stack):
             ),
         )
 
-        redshift_login = redshift.Login(
-            master_username="redshift-user",
-            master_password=self.redshift_secret.secret_value_from_json("password"),
-        )
-
         redshift_s3_read_access_role = iam.Role(
             self,
             "redshiftS3AccessRole",
@@ -52,7 +47,10 @@ class RedshiftClusterStack(Stack):
         redshift_cluster = redshift.Cluster(
             self,
             id="redshift-cluster",
-            master_user=redshift_login,
+            master_user=redshift.ClusterProps(  # Cambiar esta línea
+                master_username="redshift-user",
+                master_password=self.redshift_secret.secret_value_from_json("password"),
+            ),
             vpc=vpc.instance,
             cluster_type=redshift.ClusterType.SINGLE_NODE,
             default_database_name="redshift-db",
