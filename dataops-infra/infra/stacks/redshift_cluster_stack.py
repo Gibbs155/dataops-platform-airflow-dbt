@@ -58,7 +58,7 @@ class RedshiftClusterStack(core.Stack):
             cluster_type=redshift.ClusterType.SINGLE_NODE,
             default_database_name="redshift-db",
             encrypted=True,
-            node_type=redshift.NodeType.DC2_LARGE,
+            node_type=redshift.NodeType.RA3_LARGE,
             port=5439,
             roles=[redshift_s3_read_access_role],
             security_groups=[vpc.redshift_sg],

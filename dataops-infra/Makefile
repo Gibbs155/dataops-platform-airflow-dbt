@@ -29,7 +29,7 @@ synth: venv
 	@$(WITH_VENV) cd infra; cdk synth "*"
 
 .PHONY: generate_fernet
-generate_fernet: venv
+generate_fernet: venv 
 	@$(WITH_VENV) python scripts/fernet.py
 
 .PHONY: bootstrap
