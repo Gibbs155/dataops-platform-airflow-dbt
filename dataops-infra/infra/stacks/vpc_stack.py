@@ -1,4 +1,4 @@
-from aws_cdk import aws_ec2 as ec2, Stack, RemovalPolicy
+from aws_cdk import aws_ec2 as ec2, Stack, RemovalPolicy, CfnOutput, Tags as Tag
 from typing import List
 from constructs import Construct
 
@@ -22,7 +22,7 @@ class VpcStack(Stack):
         CfnOutput(self, "Output", value=self._instance.vpc_id)
 
     @property
-    def instance(self) -> Resource:
+    def instance(self) -> ec2.Vpc:
         return self._instance
 
     @property
@@ -151,7 +151,7 @@ class VpcStack(Stack):
         for st_name, st in subnet_types.items():
             selection = self.instance.select_subnets(subnet_type=st)
             for subnet in selection.subnets:
-                Tag.add(
+                Tags.of(
                     subnet, "Name", f"{st_name}-subnet-{subnet.availability_zone}"
                 )
-        Tag.add(self.instance, "Name", "dataops-vpc")
+        Tag.of(self.instance, "Name", "dataops-vpc")

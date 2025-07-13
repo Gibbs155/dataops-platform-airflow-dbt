@@ -56,5 +56,5 @@ class RDSStack(Stack):
         self._instance = postgres
 
     @property
-    def instance(self) -> Resource:
+    def instance(self) -> rds.DatabaseInstance:
         return self._instance

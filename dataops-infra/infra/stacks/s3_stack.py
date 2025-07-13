@@ -23,5 +23,5 @@ class S3Stack(Stack):
         )
 
     @property
-    def instance(self) -> Resource:
+    def instance(self) -> s3.Bucket:
         return self._instance

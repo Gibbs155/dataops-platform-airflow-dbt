@@ -141,5 +141,5 @@ class AirflowClusterStack(Stack):
         )
 
     @property
-    def instance(self) -> Resource:
+    def instance(self) -> ecs.Cluster:
         return self._instance

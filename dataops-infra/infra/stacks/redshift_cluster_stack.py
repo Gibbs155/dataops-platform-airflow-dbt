@@ -68,5 +68,5 @@ class RedshiftClusterStack(Stack):
         self._instance = redshift_cluster
 
     @property
-    def instance(self) -> Resource:
+    def instance(self) -> redshift.Cluster:
         return self._instance

@@ -31,5 +31,5 @@ class RedisStack(Stack):
         self._instance = redis
 
     @property
-    def instance(self) -> Resource:
+    def instance(self) ->  ecache.CfnCacheCluster:
         return self._instance
