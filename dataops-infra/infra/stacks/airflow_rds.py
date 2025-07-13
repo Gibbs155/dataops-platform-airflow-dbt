@@ -38,7 +38,7 @@ class RDSStack(Stack):
                 version=rds.PostgresEngineVersion.VER_13_5
             ),
             vpc=vpc.instance,
-            vpc_placement=ec2.SubnetSelection(subnet_type=ec2.SubnetType.ISOLATED),
+            vpc_placement=ec2.SubnetSelection(subnet_type=ec2.SubnetType.PRIVATE_ISOLATED),
             port=5432,
             instance_type=ec2.InstanceType.of(
                 ec2.InstanceClass.BURSTABLE2,

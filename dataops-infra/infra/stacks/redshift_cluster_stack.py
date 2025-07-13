@@ -18,7 +18,7 @@ class RedshiftClusterStack(Stack):
             id="RedshiftSubnetGroup",
             description="Redshift private subnet group",
             vpc=vpc.instance,
-            vpc_subnets=ec2.SubnetSelection(subnet_type=ec2.SubnetType.ISOLATED),
+            vpc_subnets=ec2.SubnetSelection(subnet_type=ec2.SubnetType.PRIVATE_ISOLATED),
         )
 
         self.redshift_secret = sm.Secret(
