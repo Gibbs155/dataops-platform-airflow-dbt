@@ -10,3 +10,5 @@ aws_cdk.aws_logs==1.90.0
 aws_cdk.aws_elasticache==1.90.0
 aws_cdk.aws_redshift==1.90.0
 aws_cdk.aws_servicediscovery==1.90.0
+aws-cdk-lib 
+constructs
