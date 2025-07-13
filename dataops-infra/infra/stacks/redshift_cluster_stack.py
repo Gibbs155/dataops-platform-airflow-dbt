@@ -13,7 +13,7 @@ class RedshiftClusterStack(Stack):
     def __init__(self, scope: Construct, id: str, vpc: VpcStack, **kwargs) -> None:
         super().__init__(scope, id, **kwargs)
 
-        subnet_group = redshift.ClusterSubnetGroup(
+        subnet_group = redshift.CfnClusterSubnetGroup(
             self,
             id="RedshiftSubnetGroup",
             description="Redshift private subnet group",
