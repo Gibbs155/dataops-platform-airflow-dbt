@@ -1,13 +1,12 @@
 import os
 from aws_cdk import (
-    Stack, RemovalPolicy
+    Stack, RemovalPolicy,
     aws_ecs as ecs,
 )
 from types import SimpleNamespace
 from stacks.airflow_cluster_stack import AirflowClusterStack
 from stacks.ecr_stack import ECRStack
 from stacks.redshift_cluster_stack import RedshiftClusterStack
-from types import SimpleNamespace
 from typing_extensions import TypedDict
 from constructs import Construct
 
