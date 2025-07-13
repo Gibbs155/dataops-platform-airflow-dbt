@@ -22,7 +22,7 @@ class RDSStack(core.Stack):
                 secret_string_template='{"username": "airflow"}',
                 generate_string_key="password",
                 password_length=16,
-                exclude_characters='"@\\\/',
+                exclude_characters='"@\\\\/.',
                 exclude_punctuation=True,
             ),
         )
@@ -35,7 +35,7 @@ class RDSStack(core.Stack):
             instance_identifier="airflow-cdk",
             database_name=self.db_name,
             engine=rds.DatabaseInstanceEngine.postgres(
-                version=rds.PostgresEngineVersion.VER_13_13
+                version=rds.PostgresEngineVersion.VER_13_5
             ),
             vpc=vpc.instance,
             vpc_placement=ec2.SubnetSelection(subnet_type=ec2.SubnetType.ISOLATED),
