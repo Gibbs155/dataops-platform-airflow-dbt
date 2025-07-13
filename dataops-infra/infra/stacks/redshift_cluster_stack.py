@@ -30,7 +30,7 @@ class RedshiftClusterStack(Stack):
                 secret_string_template='{"username": "redshift-user"}',
                 generate_string_key="password",
                 password_length=32,
-                exclude_characters='"@\\\/',
+                exclude_characters='"@\\\\/',
                 exclude_punctuation=True,
             ),
         )
@@ -54,7 +54,7 @@ class RedshiftClusterStack(Stack):
             self,
             id="redshift-cluster",
             master_user=redshift_login,
-            vpc=vpc,
+            vpc=vpc.instance,
             cluster_type=redshift.ClusterType.SINGLE_NODE,
             default_database_name="redshift-db",
             encrypted=True,
@@ -68,5 +68,5 @@ class RedshiftClusterStack(Stack):
         self._instance = redshift_cluster
 
     @property
-    def instance(self) -> redshift.Cluster:
+    def instance(self) -> redshift.CfnCluster:
         return self._instance
