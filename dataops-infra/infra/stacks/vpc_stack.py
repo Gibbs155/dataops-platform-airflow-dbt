@@ -1,4 +1,4 @@
-from aws_cdk import aws_ec2 as ec2, Stack, RemovalPolicy, CfnOutput, Tags
+from aws_cdk import aws_ec2 as ec2, Stack, RemovalPolicy, CfnOutput, Tags, Duration
 from typing import List
 from constructs import Construct
 
@@ -10,7 +10,7 @@ class VpcStack(Stack):
             self,
             "dataops-vpc",
             max_azs=2,
-            cidr="10.0.0.0/16",
+            ip_addresses=ec2.IpAddresses.cidr("10.0.0.0/16"),  # Cambiar de cidr="10.0.0.0/16"
             subnet_configuration=self.subnets,
             enable_dns_hostnames=True,
             enable_dns_support=True,

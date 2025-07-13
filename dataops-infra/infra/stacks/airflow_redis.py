@@ -1,7 +1,7 @@
 from aws_cdk import (
     aws_elasticache as ecache,
     aws_ec2 as ec2,
-    Stack, RemovalPolicy
+    Stack, RemovalPolicy, Duration
 )
 from stacks.vpc_stack import VpcStack
 from constructs import Construct

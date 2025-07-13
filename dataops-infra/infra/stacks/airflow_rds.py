@@ -3,7 +3,7 @@ from aws_cdk import (
     aws_ec2 as ec2,
     aws_rds as rds,
     aws_secretsmanager as sm,
-    Stack, RemovalPolicy
+    Stack, RemovalPolicy, Duration
 )
 from stacks.vpc_stack import VpcStack
 from constructs import Construct
@@ -35,7 +35,7 @@ class RDSStack(Stack):
             instance_identifier="airflow-cdk",
             database_name=self.db_name,
             engine=rds.DatabaseInstanceEngine.postgres(
-                version=rds.PostgresEngineVersion.VER_13_5
+                version=rds.PostgresEngineVersion.VER_15_5
             ),
             vpc=vpc.instance,
             vpc_placement=ec2.SubnetSelection(subnet_type=ec2.SubnetType.PRIVATE_ISOLATED),
@@ -48,7 +48,7 @@ class RDSStack(Stack):
             security_groups=[vpc.postgres_sg],
             removal_policy=RemovalPolicy.DESTROY,
             parameter_group=rds.ParameterGroup.from_parameter_group_name(
-                self, "para-group-postgres", parameter_group_name="default.postgres13"
+                self, "para-group-postgres", parameter_group_name="default.postgres15"
             ),
             deletion_protection=False,
         )
