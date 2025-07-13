@@ -28,7 +28,7 @@ class VpcStack(Stack):
     @property
     def get_vpc_private_subnet_ids(self) -> ec2.SelectedSubnets:
         return self.instance.select_subnets(
-            subnet_type=ec2.SubnetType.ISOLATED
+            subnet_type=ec2.SubnetType.PRIVATE_ISOLATED
         ).subnet_ids
 
     @property
@@ -38,7 +38,7 @@ class VpcStack(Stack):
                 subnet_type=ec2.SubnetType.PUBLIC, name="public", cidr_mask=24
             ),
             ec2.SubnetConfiguration(
-                subnet_type=ec2.SubnetType.ISOLATED, name="dataops", cidr_mask=24
+                subnet_type=ec2.SubnetType.PRIVATE_ISOLATED, name="dataops", cidr_mask=24
             ),
         ]
 
@@ -132,7 +132,7 @@ class VpcStack(Stack):
                 name,
                 vpc=self.instance,
                 service=service,
-                subnets=ec2.SubnetSelection(subnet_type=ec2.SubnetType.ISOLATED),
+                subnets=ec2.SubnetSelection(subnet_type=ec2.SubnetType.PRIVATE_ISOLATED),
                 private_dns_enabled=True,
                 security_groups=[self.vpc_endpoint_sg],
             )
@@ -140,7 +140,7 @@ class VpcStack(Stack):
         self.instance.add_gateway_endpoint(
             "s3-endpoint",
             service=ec2.GatewayVpcEndpointAwsService.S3,
-            subnets=[ec2.SubnetSelection(subnet_type=ec2.SubnetType.ISOLATED)],
+            subnets=[ec2.SubnetSelection(subnet_type=ec2.SubnetType.PRIVATE_ISOLATED)],
         )
 
     def tag_subnets(self) -> None:
@@ -151,7 +151,7 @@ class VpcStack(Stack):
         for st_name, st in subnet_types.items():
             selection = self.instance.select_subnets(subnet_type=st)
             for subnet in selection.subnets:
-                Tags.of(
+                Tag.of(
                     subnet, "Name", f"{st_name}-subnet-{subnet.availability_zone}"
                 )
         Tag.of(self.instance, "Name", "dataops-vpc")
