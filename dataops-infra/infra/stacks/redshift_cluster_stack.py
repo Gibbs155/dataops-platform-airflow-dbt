@@ -44,24 +44,25 @@ class RedshiftClusterStack(Stack):
             ],
         )
 
-        redshift_cluster = redshift.CfnClusterProps(
+        # Corregido: Usar CfnCluster en lugar de CfnClusterProps
+        redshift_cluster = redshift.CfnCluster(
             self,
             id="redshift-cluster",
-            master_user=redshift.CfnClusterProps(  # Cambiar esta línea
-                master_username="redshift-user",
-                master_password=self.redshift_secret.secret_value_from_json("password"),
-            ),
-            vpc=vpc.instance,
-            cluster_type=redshift.ClusterType.SINGLE_NODE,
-            default_database_name="redshift-db",
+            cluster_type="single-node",  # Cambiar a string
+            node_type="ra3.xlplus",      # Cambiar a string
+            master_username="redshift-user",
+            master_user_password=self.redshift_secret.secret_value_from_json("password").unsafe_unwrap(),
+            db_name="redshift-db",       # Cambiar de default_database_name a db_name
             encrypted=True,
-            node_type=redshift.NodeType.RA3_XLPLUS,
             port=5439,
-            roles=[redshift_s3_read_access_role],
-            security_groups=[vpc.redshift_sg],
-            subnet_group=subnet_group,
-            removal_policy=RemovalPolicy.DESTROY,
+            iam_roles=[redshift_s3_read_access_role.role_arn],  # Cambiar a iam_roles y usar ARN
+            vpc_security_group_ids=[vpc.redshift_sg.security_group_id],  # Cambiar a vpc_security_group_ids
+            cluster_subnet_group_name=subnet_group.ref,  # Cambiar a cluster_subnet_group_name
         )
+        
+        # Aplicar removal policy al cluster
+        redshift_cluster.apply_removal_policy(RemovalPolicy.DESTROY)
+        
         self._instance = redshift_cluster
 
     @property
