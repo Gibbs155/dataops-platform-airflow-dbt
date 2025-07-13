@@ -35,7 +35,7 @@ class RDSStack(core.Stack):
             instance_identifier="airflow-cdk",
             database_name=self.db_name,
             engine=rds.DatabaseInstanceEngine.postgres(
-                version=rds.PostgresEngineVersion.VER_9_6_18
+                version=rds.PostgresEngineVersion.VER_16_9
             ),
             vpc=vpc.instance,
             vpc_placement=ec2.SubnetSelection(subnet_type=ec2.SubnetType.ISOLATED),
@@ -48,7 +48,7 @@ class RDSStack(core.Stack):
             security_groups=[vpc.postgres_sg],
             removal_policy=core.RemovalPolicy.DESTROY,
             parameter_group=rds.ParameterGroup.from_parameter_group_name(
-                self, "para-group-postgres", parameter_group_name="default.postgres9.6"
+                self, "para-group-postgres", parameter_group_name="default.postgres16"
             ),
             deletion_protection=False,
         )
