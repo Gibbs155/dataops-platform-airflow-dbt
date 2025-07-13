@@ -1,7 +1,7 @@
 import os
 
 from aws_cdk import (
-    Stack, RemovalPolicy
+    Stack, RemovalPolicy,
     aws_ecs as ecs,
     aws_secretsmanager as sm,
     aws_elasticloadbalancingv2 as elbv2,
