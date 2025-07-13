@@ -47,7 +47,7 @@ class RedshiftClusterStack(Stack):
         redshift_cluster = redshift.CfnClusterProps(
             self,
             id="redshift-cluster",
-            master_user=redshift.ClusterProps(  # Cambiar esta línea
+            master_user=redshift.CfnClusterProps(  # Cambiar esta línea
                 master_username="redshift-user",
                 master_password=self.redshift_secret.secret_value_from_json("password"),
             ),
