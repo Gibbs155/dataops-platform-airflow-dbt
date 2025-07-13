@@ -1,6 +1,6 @@
 import os
 
-from aws_cdk import Stack, RemovalPolicy aws_ecs as ecs, aws_iam as iam, aws_logs
+from aws_cdk import Stack, RemovalPolicy, aws_ecs as ecs, aws_iam as iam, aws_logs
 from stacks.vpc_stack import VpcStack
 from stacks.s3_stack import S3Stack
 from types import SimpleNamespace
