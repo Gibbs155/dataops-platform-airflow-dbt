@@ -1,9 +1,10 @@
-FROM public.ecr.aws/bitnami/airflow-worker:1.10.13
+FROM bitnami/airflow:3.0.2-debian-12-r3
 USER root
+ENV AIRFLOW_COMPONENT_TYPE=worker
 
 # Install aws cli
 RUN apt-get update -yqq && apt-get install -y unzip
-RUN curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip" -o "awscliv2.zip"
+RUN curl "https://awscli.amazonaws.com/awscliv2.zip" -o "awscliv2.zip"
 RUN unzip awscliv2.zip
 RUN ./aws/install
 
