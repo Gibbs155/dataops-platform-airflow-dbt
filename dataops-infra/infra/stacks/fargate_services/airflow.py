@@ -1,7 +1,7 @@
 import os
 
 from aws_cdk import (
-    Stack, RemovalPolicy,
+    Stack, RemovalPolicy, Duration,
     aws_ecs as ecs,
     aws_secretsmanager as sm,
     aws_elasticloadbalancingv2 as elbv2,
@@ -36,7 +36,7 @@ class AirflowServices(Stack):
         ns = SimpleNamespace(**props)
 
         bucket_name = os.environ.get("BUCKET_NAME")
-        fernet_key_secret = sm.Secret.from_secret_arn(
+        fernet_key_secret = sm.Secret.from_secret_complete_arn(
             self, "fernetSecret", os.environ.get("FERNET_SECRET_ARN")
         )
 
