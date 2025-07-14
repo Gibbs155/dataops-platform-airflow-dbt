@@ -102,7 +102,7 @@ class AirflowServices(Stack):
             cluster=ns.airflow_cluster.instance,
             task_definition=webserver_task,
             desired_count=1,
-            security_group=ns.vpc.airflow_sg,
+            security_groups=[ns.vpc.airflow_sg],
             assign_public_ip=False,
             cloud_map_options=ecs.CloudMapOptions(
                 cloud_map_namespace=webserver_ns,
@@ -163,7 +163,7 @@ class AirflowServices(Stack):
             cluster=ns.airflow_cluster.instance,
             task_definition=scheduler_task,
             desired_count=1,
-            security_group=ns.vpc.airflow_sg,
+            security_groups=[ns.vpc.airflow_sg],
             assign_public_ip=False,
         )
 
@@ -224,7 +224,7 @@ class AirflowServices(Stack):
             cluster=ns.airflow_cluster.instance,
             task_definition=worker_task,
             desired_count=1,
-            security_group=ns.vpc.airflow_sg,
+            security_groups=[ns.vpc.airflow_sg],
             assign_public_ip=False,
         )
 
