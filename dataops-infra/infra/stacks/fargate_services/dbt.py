@@ -48,7 +48,8 @@ class DBT(Stack):
             ),
             environment={
                 "BUCKET_NAME": bucket_name,
-                "REDSHIFT_HOST": ns.redshift.instance.cluster_endpoint.hostname,
+                # Corregido: usar attr_endpoint en lugar de cluster_endpoint.hostname
+                "REDSHIFT_HOST": ns.redshift.instance.attr_endpoint,
             },
             secrets={
                 "REDSHIFT_USER": ecs.Secret.from_secrets_manager(
