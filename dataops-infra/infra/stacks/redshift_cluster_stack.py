@@ -13,6 +13,7 @@ class RedshiftClusterStack(Stack):
     def __init__(self, scope: Construct, id: str, vpc: VpcStack, **kwargs) -> None:
         super().__init__(scope, id, **kwargs)
 
+        # Crear subnet group para Redshift
         subnet_group = redshift.CfnClusterSubnetGroup(
             self,
             id="RedshiftSubnetGroup", 
@@ -20,6 +21,7 @@ class RedshiftClusterStack(Stack):
             subnet_ids=vpc.get_vpc_private_subnet_ids,  
         )
 
+        # Crear secret para credenciales de Redshift
         self.redshift_secret = sm.Secret(
             self,
             "redshift-credentials",
@@ -34,6 +36,7 @@ class RedshiftClusterStack(Stack):
             ),
         )
 
+        # Crear rol IAM para acceso S3
         redshift_s3_read_access_role = iam.Role(
             self,
             "redshiftS3AccessRole",
@@ -44,27 +47,39 @@ class RedshiftClusterStack(Stack):
             ],
         )
 
-        # Corregido: Usar CfnCluster en lugar de CfnClusterProps
+        # Crear el cluster de Redshift
         redshift_cluster = redshift.CfnCluster(
             self,
             id="redshift-cluster",
-            cluster_type="single-node",  # Cambiar a string
-            node_type="ra3.xlplus",      # Cambiar a string
+            cluster_type="single-node",
+            node_type="ra3.xlplus",
             master_username="redshift-user",
-            master_user_password=self.redshift_secret.secret_value_from_json("password").unsafe_unwrap(),
-            db_name="redshift-db",       # Cambiar de default_database_name a db_name
+            # Usar el valor del secret correctamente
+            master_user_password=self.redshift_secret.secret_value_from_json("password").to_string(),
+            db_name="redshift-db",
             encrypted=True,
             port=5439,
-            iam_roles=[redshift_s3_read_access_role.role_arn],  # Cambiar a iam_roles y usar ARN
-            vpc_security_group_ids=[vpc.redshift_sg.security_group_id],  # Cambiar a vpc_security_group_ids
-            cluster_subnet_group_name=subnet_group.ref,  # Cambiar a cluster_subnet_group_name
+            iam_roles=[redshift_s3_read_access_role.role_arn],
+            vpc_security_group_ids=[vpc.redshift_sg.security_group_id],
+            cluster_subnet_group_name=subnet_group.ref,
         )
         
-        # Aplicar removal policy al cluster
+        # Aplicar removal policy
         redshift_cluster.apply_removal_policy(RemovalPolicy.DESTROY)
         
+        # Guardar referencia al cluster
         self._instance = redshift_cluster
 
     @property
     def instance(self) -> redshift.CfnCluster:
         return self._instance
+    
+    @property
+    def cluster_endpoint(self) -> str:
+        """Obtener el endpoint del cluster de Redshift"""
+        return self._instance.attr_endpoint_address
+    
+    @property
+    def cluster_port(self) -> str:
+        """Obtener el puerto del cluster de Redshift"""
+        return self._instance.attr_endpoint_port

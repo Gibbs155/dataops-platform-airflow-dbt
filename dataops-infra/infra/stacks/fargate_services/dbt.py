@@ -28,6 +28,8 @@ class DBT(Stack):
         ns = SimpleNamespace(**props)
 
         bucket_name = os.environ.get("BUCKET_NAME")
+        
+        # Crear la task definition de Fargate
         dbt_task = ecs.FargateTaskDefinition(
             self,
             "dbt-cdk",
@@ -37,6 +39,8 @@ class DBT(Stack):
             task_role=ns.airflow_cluster.airflow_task_role,
             execution_role=ns.airflow_cluster.task_execution_role,
         )
+        
+        # Agregar container a la task definition
         dbt_task.add_container(
             "dbt-cdk-container",
             image=ecs.ContainerImage.from_ecr_repository(
@@ -44,19 +48,25 @@ class DBT(Stack):
                 os.environ.get("IMAGE_TAG", "latest"),
             ),
             logging=ecs.AwsLogDriver(
-                stream_prefix="ecs", log_group=ns.airflow_cluster.dbt_log_group
+                stream_prefix="ecs", 
+                log_group=ns.airflow_cluster.dbt_log_group
             ),
             environment={
                 "BUCKET_NAME": bucket_name,
-                # Corregido: usar attr_endpoint en lugar de cluster_endpoint.hostname
-                "REDSHIFT_HOST": ns.redshift.instance.attr_endpoint,
+                # Acceder al endpoint correctamente
+                "REDSHIFT_HOST": ns.redshift.instance.attr_endpoint_address,
             },
             secrets={
                 "REDSHIFT_USER": ecs.Secret.from_secrets_manager(
-                    ns.redshift.redshift_secret, field="username"
+                    ns.redshift.redshift_secret, 
+                    field="username"
                 ),
                 "REDSHIFT_PASSWORD": ecs.Secret.from_secrets_manager(
-                    ns.redshift.redshift_secret, field="password"
+                    ns.redshift.redshift_secret, 
+                    field="password"
                 ),
             },
         )
+        
+        # Exponer la task definition como propiedad
+        self.dbt_task_definition = dbt_task
