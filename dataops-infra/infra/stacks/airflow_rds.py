@@ -35,7 +35,7 @@ class RDSStack(Stack):
             instance_identifier="airflow-cdk",
             database_name=self.db_name,
             engine=rds.DatabaseInstanceEngine.postgres(
-                version=rds.PostgresEngineVersion.VER_15_4  # Cambiado de VER_15_5 a VER_15_4
+                version=rds.PostgresEngineVersion.VER_15  # Cambiado de VER_15_5 a VER_15_4
             ),
             vpc=vpc.instance,
             vpc_placement=ec2.SubnetSelection(subnet_type=ec2.SubnetType.PRIVATE_ISOLATED),
